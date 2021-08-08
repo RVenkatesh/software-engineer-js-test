@@ -6,10 +6,12 @@ var { InvalidDOMElementException } = require('./exceptions');
 const CANVAS_WIDTH = 15,
     CANVAS_HEIGHT = 10;
 
+// Binds actions for all the buttons to customize the canvas
 function _bindControllerActions($root, canvas) {
-    const MOVE_LIMIT = 0.1;
-    // grab DOM elements inside index.html
-
+    // The increment for moving the image in all directions
+    const MOVE_LIMIT = 0.25;
+    
+    // grab all the buttons and input
     let fileSelector = $root.querySelector( '.file-selector' );
     let moveButtons = $root.querySelectorAll( '.move-button' );
     let scaleButtons = $root.querySelectorAll( '.scale-button' );
@@ -84,7 +86,7 @@ function CanvasController($root) {
         _bindControllerActions($root, photoCanvas);
     }
 
-
+    // This function can cleanup everything in case of multiple instances of the controller
     function destroy() {
         // destroy all the state and clear dom here
     }

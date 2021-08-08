@@ -29,6 +29,8 @@ function imageGetter( $element, callback ) {
     };
 }
 
+// Function to return how the given img can be fit within the given canvas
+// Takes either width or height and multiplies the other value by the same ratio to fill the canvas
 function getNaturalFit(canvasWidth, canvasHeight, img) {
     let canvasAspectRatio = canvasWidth / canvasHeight;
     let imgAspectRatio = img.naturalWidth / img.naturalHeight;
@@ -45,6 +47,9 @@ function getNaturalFit(canvasWidth, canvasHeight, img) {
     }
 }
 
+// This function makes sure the image fits in the best possible way in the given canvas
+// If the image needs to be rotated, it swaps the width and height, and then calculates
+// the natural fit for swapped dimensions
 function getBestFit(canvasWidth, canvasHeight, img) {
     let imgAspectRatio = img.naturalWidth / img.naturalHeight;
     let isRotated = imgAspectRatio < 1;

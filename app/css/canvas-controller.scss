@@ -16,9 +16,9 @@
     canvas {
         transform: scale(0.1);
         transform-origin: top left;
-        border: 100px solid #0061ee;
+        border: 100px solid #79c03b;
         &.is-rotated {
-        transform: scale(0.1) rotate(-90deg) translate(-100%, 0);
+            transform: scale(0.1) rotate(-90deg) translate(-100%, 0);
         }
     }
     .canvas-actions {

@@ -1,5 +1,12 @@
 var { getBestFit, getNaturalFit } = require('./utilities');
 
+// Direction constants
+const DIR_LEFT = 'LEFT';
+const DIR_RIGHT = 'RIGHT';
+const DIR_UP = 'UP';
+const DIR_DOWN = 'DOWN';
+
+// Returns a fresh photo object with bare minimum properties
 function _getNewPhoto(width, height) {
     return {
         id: '',
@@ -15,12 +22,15 @@ function PhotoCanvas(width, height, dpi = 300) {
     var canvas, context, image = new Image(),
         photo = _getNewPhoto(width, height);
 
+    // Inches => Pixels
     function _toPixels(value) {
         return value * dpi;
     }
+    // Pixels => Inches
     function _toInches(value) {
         return value / dpi;
     }
+    // Creates an empty canvas
     function _createCanvas() {
         canvas = document.createElement('canvas');
         context = canvas.getContext('2d');
@@ -28,6 +38,7 @@ function PhotoCanvas(width, height, dpi = 300) {
         canvas.width = _toPixels(width);;
         canvas.height = _toPixels(height);
     }
+    // Reset the photo object
     function _resetPhoto() {
         photo = _getNewPhoto(width, height);
     }
@@ -37,6 +48,7 @@ function PhotoCanvas(width, height, dpi = 300) {
         }
         let cWidth, cHeight, pWidth, pHeight;
         if (photo.isRotated) {
+            // Just swap width and height if the image needs rotation
             cWidth = _toPixels(height);
             cHeight = _toPixels(width);
 
@@ -59,14 +71,32 @@ function PhotoCanvas(width, height, dpi = 300) {
         
         context.fillStyle = '#fff';
   		context.fillRect(0,0, cWidth, cHeight);
-
         context.drawImage(image, _toPixels(photo.x), _toPixels(photo.y), pWidth, pHeight);
     }
 
+    // Check if the image is still covering the entire canvas with the new values
+    function _isValid(photo) {
+        let leftExceeds = photo.x > 0,
+            topExceeds = photo.y > 0,
+            rightExceeds = (photo.x + photo.width) < width,
+            bottomExceeds = (photo.height + photo.y) < height;
+        
+        if (photo.isRotated) {
+            // For rotated photo height is in the x axis
+            rightExceeds = (photo.x + photo.height) < height;
+            // For rotated photo width is in the y axis
+            bottomExceeds = (photo.y + photo.width) < width;
+        }
+        // Return invalid even if one boundary fails
+        return !(leftExceeds || rightExceeds || topExceeds || bottomExceeds);
+    }
+
+    // Exposes the canvas object
     function getCanvas() {
         return canvas;
     }
 
+    // Allow consuming components to change image
     function updateImg(img, bestFit = false) {
         let cWidth = _toPixels(width), cHeight = _toPixels(height);
         let fitPhoto = bestFit ? getBestFit : getNaturalFit;
@@ -91,6 +121,7 @@ function PhotoCanvas(width, height, dpi = 300) {
         image.onload = load;
     }
 
+    // Get print description for the current photo
     function getPrintDescription() {
         if (!image.src) {
             return;
@@ -102,6 +133,7 @@ function PhotoCanvas(width, height, dpi = 300) {
         }
     }
 
+    // Load the given print description into the canvas
     function applyPrintDescription(desc) {
         // Get details from description
         ({ width, height, photo } = desc);
@@ -111,20 +143,6 @@ function PhotoCanvas(width, height, dpi = 300) {
         image.onload = _drawImg;
     }
 
-    function _isValid(photo) {
-        let leftExceeds = photo.x > 0,
-            topExceeds = photo.y > 0,
-            rightExceeds = (photo.x + photo.width) < width,
-            bottomExceeds = (photo.height + photo.y) < height;
-        
-        if (photo.isRotated) {
-            rightExceeds = (photo.x + photo.height) < height;
-            bottomExceeds = (photo.y + photo.width) < width;
-        }
-        return !(leftExceeds || rightExceeds || topExceeds || bottomExceeds);
-        // return true
-    }
-
     // amount in inches
     function move(direction, amount) {
         if (!image.src) {
@@ -132,22 +150,23 @@ function PhotoCanvas(width, height, dpi = 300) {
         }
         let newPhoto = { ...photo };
         if (newPhoto.isRotated) {
-            direction = (direction === 'LEFT' && 'UP') || 
-                    (direction === 'RIGHT' && 'DOWN') ||
-                    (direction === 'UP' && 'RIGHT') ||
-                    (direction === 'DOWN' && 'LEFT');
+            // Just swap the direction for a rotated canvas
+            direction = (direction === DIR_LEFT && DIR_UP) || 
+                    (direction === DIR_RIGHT && DIR_DOWN) ||
+                    (direction === DIR_UP && DIR_RIGHT) ||
+                    (direction === DIR_DOWN && DIR_LEFT);
         }
         switch (direction) {
-            case 'LEFT':
+            case DIR_LEFT:
                 newPhoto.x -= amount;
                 break;
-            case 'RIGHT':
+            case DIR_RIGHT:
                 newPhoto.x += amount;
                 break;
-            case 'UP':
+            case DIR_UP:
                 newPhoto.y -= amount;
                 break;
-            case 'DOWN':
+            case DIR_DOWN:
                 newPhoto.y += amount;
                 break;
         }
@@ -156,6 +175,7 @@ function PhotoCanvas(width, height, dpi = 300) {
         newPhoto.y = parseFloat(newPhoto.y.toFixed(2));
 
         if (_isValid(newPhoto)) {
+            // The movement is valid. So, update the image
             photo = newPhoto;
             _drawImg();
         }
@@ -181,6 +201,8 @@ function PhotoCanvas(width, height, dpi = 300) {
         }
 
     }
+
+    // TODO: Add more functions editing options like rotating the image, applying filters here
 
     function destroy() {
         // destroy all the state and clear dom here
