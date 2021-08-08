@@ -1,0 +1,33 @@
+.canvas-controller {
+    padding: 20px;
+    position: relative;
+    .load-error {
+        position: absolute;
+        // top: 10px;
+        z-index: -1;
+    }
+    .canvas-container {
+        background-color: #fff;
+        // This can calculated dynamically
+        height: 380px;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    canvas {
+        transform: scale(0.1);
+        transform-origin: top left;
+        border: 100px solid #0061ee;
+        &.is-rotated {
+        transform: scale(0.1) rotate(-90deg) translate(-100%, 0);
+        }
+    }
+    .canvas-actions {
+        text-align: center;
+        form {
+            margin-bottom: 10px;
+        }
+        .move-up {
+            transform: rotate(180deg);
+        }
+    }
+}

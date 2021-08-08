@@ -12,33 +12,49 @@
             Your application is ready. There should be a message in your browsers
             console indicating the JavaScript application has loaded.
         </p>
-        <form action="#">
-            <fieldset>
-                <label for="fileSelector">Select an Image file</label>
-                <input type="file" id="fileSelector" />
-            </fieldset>
-        </form>
         <div class="column left">
-            <div id="imageContainer">
-                <!-- will hold photos -->
-                <canvas id="photo" width="4500" height="3000"></canvas>
+            <div class="canvas-controller">
+                <div class="load-error">Canvas controller not yet initialized</div>
             </div>
-            <button id="generateButton">Generate Description</button>
-            <button id="saveButton">Save</button>
-            <button id="loadButton">Load Description!</button>
-            <button class="move-button" data-dir="LEFT">Move Left</button>
-            <button class="move-button" data-dir="RIGHT">Move Right</button>
-            <button class="move-button" data-dir="UP">Move Up</button>
-            <button class="move-button" data-dir="DOWN">Move Down</button>
-            <button class="scale-button" data-value="0.5">Scale 50%</button>
-            <button class="scale-button" data-value="2">Scale 200%</button>
-            <textarea id="description" disabled></textarea>
         </div>
         <div class="column right">
+            <div class="description-actions">
+                <button class="generate-button">Generate & Save Description</button>
+                <textarea class="description" disabled></textarea><br>
+                <button class="clear-button">Clear Saved Descriptions</button><br>
+                <select class="saved-descriptions" placeholder="Choose Photo">
+                    <option data-placeholder="true">Choose From Saved Descriptions</option>
+                </select>
+            </div>
             <div id="debugContainer">
                 <!-- will hold debug messages -->
             </div>
         </div>
+
+        <!-- TEMPLATES GO HERE -->
+        <template id="canvas-container">
+            <div class="canvas-container">
+                <!-- will hold photos -->
+            </div>
+        </template>
+        <template id="canvas-actions">
+            <div class="canvas-actions">
+                <form action="#">
+                    <fieldset>
+                        <label for="fileSelector">Select an Image file</label>
+                        <input class="file-selector" type="file" id="fileSelector" accept="image/*" />
+                    </fieldset>
+                </form>
+                <fieldset>
+                    <button class="move-button" data-dir="LEFT">&lt;</button>
+                    <button class="move-button" data-dir="RIGHT">&gt;</button>
+                    <button class="move-button move-up" data-dir="UP">v</button>
+                    <button class="move-button" data-dir="DOWN">v</button>
+                    <button class="scale-button" data-value="0.5">Scale 50%</button>
+                    <button class="scale-button" data-value="2">Scale 200%</button>
+                </fieldset>
+            </div>
+        </template>
         <script type="text/javascript" src="./app/js/main.js"></script>
     </body>
 </html>

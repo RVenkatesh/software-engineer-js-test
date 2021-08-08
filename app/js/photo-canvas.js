@@ -1,51 +1,19 @@
-function _getNaturalFit(canvasWidth, canvasHeight, img) {
-    let canvasAspectRatio = canvasWidth / canvasHeight;
-    let imgAspectRatio = img.naturalWidth / img.naturalHeight;
-    if (canvasAspectRatio < imgAspectRatio) {
-        return {
-            width: img.naturalWidth * canvasHeight / img.naturalHeight,
-            height: canvasHeight
-        }
-    } else {
-        return {
-            width: canvasWidth,
-            height: img.naturalHeight * canvasWidth / img.naturalWidth
-        }
-    }
-}
+var { getBestFit, getNaturalFit } = require('./utilities');
 
-function _getBestFit(canvasWidth, canvasHeight, img) {
-    let imgAspectRatio = img.naturalWidth / img.naturalHeight;
-    let isRotated = imgAspectRatio < 1;
-    let imgDimensions = {
-        naturalWidth: img.naturalWidth,
-        naturalHeight: img.naturalHeight,
-    }
-    // To make the best fit of the photo inside the canvas, 
-    // just invert the image dimensions if the photo is in portrait mode
-    if (isRotated) {
-        imgAspectRatio = img.naturalHeight / img.naturalWidth;
-        imgDimensions = {
-            naturalWidth: img.naturalHeight,
-            naturalHeight: img.naturalWidth,
-        }
-    }
-
+function _getNewPhoto(width, height) {
     return {
-        ..._getNaturalFit(canvasWidth, canvasHeight, imgDimensions),
-        isRotated,
+        id: '',
+        x: 0,
+        y: 0,
+        width,
+        height,
+        isRotated: false,
     };
-}
+} 
 
 function PhotoCanvas(width, height, dpi = 300) {
     var canvas, context, image = new Image(),
-        photo = {
-            x: 0,
-            y: 0,
-            width,
-            height,
-            isRotated: false,
-        };
+        photo = _getNewPhoto(width, height);
 
     function _toPixels(value) {
         return value * dpi;
@@ -61,13 +29,7 @@ function PhotoCanvas(width, height, dpi = 300) {
         canvas.height = _toPixels(height);
     }
     function _resetPhoto() {
-        photo = {
-            x: 0,
-            y: 0,
-            width,
-            height,
-            isRotated: false,
-        };
+        photo = _getNewPhoto(width, height);
     }
     function _drawImg() {
         if (!image.src) {
@@ -107,7 +69,7 @@ function PhotoCanvas(width, height, dpi = 300) {
 
     function updateImg(img, bestFit = false) {
         let cWidth = _toPixels(width), cHeight = _toPixels(height);
-        let fitPhoto = bestFit ? _getBestFit : _getNaturalFit;
+        let fitPhoto = bestFit ? getBestFit : getNaturalFit;
         image.src = img.src;
         
         function load() {
@@ -130,10 +92,9 @@ function PhotoCanvas(width, height, dpi = 300) {
     }
 
     function getPrintDescription() {
-        // let printablePhoto = { ...photo };
-        // // convert pixel values to inches
-        // printablePhoto.width = _toInches(photo.width);
-        // printablePhoto.height = _toInches(photo.height);
+        if (!image.src) {
+            return;
+        }
         return {
             width,
             height,
@@ -221,6 +182,10 @@ function PhotoCanvas(width, height, dpi = 300) {
 
     }
 
+    function destroy() {
+        // destroy all the state and clear dom here
+    }
+
     // Create a simple canvas
     _createCanvas();
 
@@ -231,6 +196,7 @@ function PhotoCanvas(width, height, dpi = 300) {
         applyPrintDescription,
         move,
         scale,
+        destroy,
     }
 }
 module.exports = PhotoCanvas;

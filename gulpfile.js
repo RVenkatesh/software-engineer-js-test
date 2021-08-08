@@ -65,7 +65,9 @@ gulp.task('styles', () => {
         .pipe(sass({
             errLogToConsole: true,
             includePaths: [
-                'app/css/'
+                'app/css/',
+                // Allow css from node modules to be loaded
+                'node_modules/',
             ]
         }))
         //catch errors
