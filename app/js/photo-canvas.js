@@ -1,3 +1,7 @@
+/** 
+ * This module draws the given image into a new canvas and provides basic editing functionalities
+ */
+
 var { getBestFit, getNaturalFit } = require('./helpers/utilities');
 
 // Direction constants

@@ -1,3 +1,8 @@
+/** 
+ * This module uses the PhotoCanvas module to show an image in canvas
+ * It also adds controller buttons for various actions like move, scale and so on
+ */
+
 var PhotoCanvas = require('./photo-canvas');
 var { imageGetter } = require('./helpers/utilities');
 var log = require('./helpers/log');
