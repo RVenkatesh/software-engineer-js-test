@@ -116,6 +116,7 @@ function PhotoCanvas(width, height, dpi = 300) {
             _drawImg();
         }
         if (img.id === photo.id) {
+            // Force redraw if the same image is loaded
             load();
         }
         image.onload = load;

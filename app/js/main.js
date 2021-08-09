@@ -56,7 +56,7 @@ generateButton.onclick = function( e ) {
     }
 
     localForage.setItem(printDescription.photo.id, printDescription);
-    log(`Saved description of ${printDescription.photo.id}`);
+    log(`Saved description of <b>${printDescription.photo.id}</b>`);
     
     // Display description to user
     let strippedDesc = stripDesc(printDescription);
