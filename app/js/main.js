@@ -1,7 +1,7 @@
 var localForage = require('localforage');
 var SlimSelect = require('slim-select');
 var CanvasController = require('./canvas-controller');
-var log = require('./log');
+var log = require('./helpers/log');
 
 
 // Create new canvas controller

@@ -1,7 +1,7 @@
 var PhotoCanvas = require('./photo-canvas');
-var { imageGetter } = require('./utilities');
-var log = require('./log');
-var { InvalidDOMElementException } = require('./exceptions');
+var { imageGetter } = require('./helpers/utilities');
+var log = require('./helpers/log');
+var { InvalidDOMElementException } = require('./helpers/exceptions');
 
 const CANVAS_WIDTH = 15,
     CANVAS_HEIGHT = 10;

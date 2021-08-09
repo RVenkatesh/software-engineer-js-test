@@ -1,4 +1,4 @@
-var { getBestFit, getNaturalFit } = require('./utilities');
+var { getBestFit, getNaturalFit } = require('./helpers/utilities');
 
 // Direction constants
 const DIR_LEFT = 'LEFT';
